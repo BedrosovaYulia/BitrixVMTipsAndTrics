@@ -15,7 +15,10 @@ firewall-cmd --list-all
 systemctl start firewalld
 6) дать пользователю root право коннкетиться с любого хоста
 mysql
-GRANT ALL PRIVILEGES ON sitemanager TO root@localhost IDENTIFIED BY 'пароль_рута' WITH GRANT OPTION;
+use sitemanager
+GRANT ALL PRIVILEGES ON *.* TO root@'%' IDENTIFIED BY 'пароль_рута' WITH GRANT OPTION;
+exit
+systemctl restart mysqld
 7) проверить, что все работает, как надо - потом поставить файрвол на автозапуск
 systemctl enable firewalld
 
