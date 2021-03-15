@@ -1,0 +1,113 @@
+Чтобы открыть доступ к mysql на сервере:
+1) проверить состояние файрвола
+firewall-cmd --state
+2) если не запущен - запустить
+systemctl start firewalld
+3) добавить правила
+firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --permanent --add-port=443/tcp
+firewall-cmd --permanent --add-port=22/tcp
+firewall-cmd --permanent --add-port=3306/tcp
+4) применить правила
+firewall-cmd --reload
+firewall-cmd --list-all
+5) если не применились или если перестал открываться сайт в браузере, перезагрузить и снова сделать
+systemctl start firewalld
+
+проверить, что все работает, как надо - потом поставить файрвол на автозапуск
+systemctl enable firewalld
+
+
+чтобы очистить бинарные логи mysql на сервере:
+mysql> PURGE BINARY LOGS BEFORE '2021-03-12 23:00:26';
+
+
+mysqlshow -uadmin -hdatabase-2.c5xd2xaxuh02.af-south-1.rds.amazonaws.com -p
+
+
+aws s3 sync ./voximplant s3://second-upload-bucet-cf/voximplant
+
+aws s3 sync ./disk s3://second-upload-bucet-cf/disk
+
+
+aws s3 sync ./tmp s3://second-upload-bucet-cf/tmp
+
+
+13.46
+На старом серере в папке /upload/
+mysqldump -ubitrix0 -hlocalhost -p sitemanager --ignore-table=sitemanager.b_search_content_stem --add-drop-table  > sitemanager_new.sql
+
+
+mysqldump -uroot -hlocalhost -p sitemanager —tables sitemanager.b_file --add-drop-table  > sitemanager_new.sql
+
+
+zip sitemanager_new.zip sitemanager_new.sql
+
+14.18
+поменять тип инстанса на более мощный
+На новом сервере в папке /upload/
+wget https://bitrix.cyberfinance.co.za/upload/sitemanager_new.zip
+unzip sitemanager_new.zip
+
+16.00
+
+или
+
+mysql
+use sitemanager
+source sitemanager_new.sql
+вернуть тип инстанса на более слабый
+проверить работает ли доступ к БД - запустить файрвол
+https://www.dmosk.ru/miniinstruktions.php?mini=firewalld-centos
+
+проверить бекапы +
+
+разблокировать публичку +
+разблокировать астериск +
+сделать публичными те разделы бакета, к-е должны быть публичными + 
+
+Прописать +
+old_bitrix.cyberfinance.co.za A 129.205.140.204
+bitrix.cyberfinance.co.za A 13.244.207.186
+
+Выписать новый сертификат + old-bitrix.cyberfinance.co.za
+
+Поправить название портала в БД для старого портала
+Запустить агенты на крон +
+chmod -R 0755 /home/bitrix/www 
+chown -R bitrix:bitrix /home/bitrix/www 
+chown -R bitrix:bitrix *
+chown -R bitrix:bitrix .??*
+
+
+*/1 * * * * root /home/monitor/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-space-used --disk-space-avail --disk-path=/
+
+
+
+select count(*) from b_file where HANDLER_ID=1
+
+104942
+
+1431782
+
+
+aws s3 sync s3://second-upload-bucet-cf/voximplant s3://b24-upload-bac0adb7383b800fb0001696ed38/voximplant --source-region us-east-1 --region us-east-1
+
+
+UPDATE b_file SET HANDLER_ID=3 WHERE HANDLER_ID IS NULL
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::b24-upload-bac0adb7383b800fb0001696ed38/*"
+        }
+    ]
+}
+
+чтобы сделать бекап корзины:
+aws s3 sync s3://b24-upload-bac0adb7383b800fb0001696ed38 s3://second-upload-bucet-cf --source-region us-east-1 --region us-east-1 --profile hans
+
